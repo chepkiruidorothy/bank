@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+{% block content %}
+
+<div class="container">
+  <form class="" action="" method="post">
+      {% csrf_token %}
+      <h1>Cannot withdraw!!! Your balance is low</h1>
+      <a href = "{% url 'home'%}" type="submit" name="button">Home</a>
+  </form>
+</div>
+
+
+
+{% endblock %}

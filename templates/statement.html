@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <form class="" action="" method="post">
+<h1>Your current balance is {{account.balance}}</h1>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Type</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+
+      <tbody>
+          {% for transaction in transactions%}
+        <tr>
+          <td class="{% if transaction.type == 'Withdrawal'%} text-danger {%endif%}"> {{transaction.type}}</td>
+
+          <td class="{% if transaction.type == 'Withdrawal'%} text-danger {%endif%}">{{transaction.amount}}</td>
+          <td>{{transaction.timestamp}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+<a href = "{% url 'home'%}" type="submit" name="button">Home</a>
+  </form>
+
+</div>
+{% endblock %}

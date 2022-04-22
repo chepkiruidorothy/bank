@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+
+{% block content%}
+
+
+<section id="welcome_post" class="col-9">
+    <h2>Welcome, <span id="prof_name">{{ User }}.</span> </h2>
+    <h4 style="font-weight: 300;">It's good to have you here.</h4>
+    <br>
+    <form>
+        <h3 style="font-weight: 300;">
+        What type of loans do you need?
+          <ul>
+            <form action="#">
+                  <label for="lang">Loans</label>
+                  <select name="loans" id="lang">
+                    <option value="emergency">{{loans.name}}</option>
+                      <option value="emergency">{{loans.name}}</option>
+                  </select>
+                  <input type="submit" value="Submit" />
+            </form>
+          </ul>
+
+
+
+        </h3>
+
+        <h3 style="font-weight: 300;">
+            Enter the amount of loan needed (Ksh)
+            <input type="number" class="form-control" id="loan_amt" required>
+        </h3>
+        <small>Please read the <a href="#">Terms and Conditions</a> before requesting for loan</small>. <br>
+        <button class="btn btn-primary" type="button" id="loan_submit">Request loan</button>
+    </form>
+
+</section>
+{% endblock%}

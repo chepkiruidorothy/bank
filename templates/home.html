@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb">Bank</li>
+{% endblock %}
+
+  {% block content%}
+<div class="container">
+
+
+      <div class="row">
+  <div class="card" s>
+  <div class="card-body">
+    <h5 class="card-title">Account</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Create your account today</h6>
+    <p class="card-text">Get high interest rates today with our banking system.</p>
+
+<a href="{% url 'create'%}" class="btn btn-primary">Create an account</a>
+
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Account</th>
+
+          <th scope="col">Balance</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for account in accounts %}
+        <tr>
+          <th scope="row">{{account.name}}</th>
+          <td>{{account.balance}}</td>
+<td>
+          <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      Transact
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      <li><a href="{%url 'withdraw' account.pk %}" class="btn btn-secondary">Withdraw</a></li>
+      <li><a class="btn btn-dark" href="{%url 'deposit' account.pk %}">Deposit</a></li>
+    </ul>
+  </div>
+</div>
+          </td>
+          <td><a href="{%url 'statement' account.pk %}" class="btn btn-secondary">Mini_statement</a></td>
+          <td><a href="{%url 'delete' account.pk %}" class="btn btn-secondary">Delete</a></td>
+          <td><a href="{%url 'loan' account.pk%}" class="btn btn-dark">Request Loan</a></td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+
+  </div>
+</div>
+</div>
+</div>
+{% endblock%}
