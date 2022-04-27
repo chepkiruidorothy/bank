@@ -21,11 +21,13 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
+    path('home/', views.home, name='home'),
+    path('', views.index, name='index'),
     path('accounts/create/',views.create,name='create'),
     path('accounts/delete/<int:pk>',views.delete,name='delete'),
     path('accounts/withdraw/<int:pk>/',views.withdraw,name='withdraw'),
     path('accounts/statement/<int:pk>/',views.statement,name='statement'),
+    path('accounts/loan_statement/<int:pk>/',views.loan_statement,name='loan_statement'),
     path('accounts/deposit/<int:pk>/',views.deposit,name='deposit'),
     path('loans/loan/<int:pk>/', views.request_loan, name='loan'),
     path('accounts/', include('allauth.urls')),

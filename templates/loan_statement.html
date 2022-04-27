@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <form class="" action="" method="post">
+<a href="{%url 'home'%}" type="submit" name="button">Home</a>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Amount</th>
+      <th scope="col">Duration</th>
+      <th scope="col">Pending</th>
+      <th scope="col">Time of borrowing</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    {% for loan in loans%}
+    <tr>
+
+      <td > {{loan.amount}}</td>
+      <td > {{loan.duration}} months</td>
+      <td >
+        {{loan.pending}}
+    </td>
+      <td > {{loan.timestamp}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+
+  </form>
+
+</div>
+{% endblock %}

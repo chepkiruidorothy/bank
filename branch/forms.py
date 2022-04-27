@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from .models import Account, Loan, Customer
 
-class AccountForm(ModelForm):
+class AccountForm(forms.ModelForm):
     name=forms.CharField(label='Name',widget=forms.TextInput(attrs={'class':'form-control'}))
     balance= forms.DecimalField( label='Balance ', widget = forms.TextInput(attrs={'class':'form-control'}))
     class Meta:

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block breadcrumb %}
-<li class="breadcrumb">Bank</li>
+{% block title %}
+Bank
 {% endblock %}
 
   {% block content%}
@@ -33,21 +33,20 @@
           <th scope="row">{{account.name}}</th>
           <td>{{account.balance}}</td>
 <td>
-          <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-  <div class="btn-group" role="group">
-    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-      Transact
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-      <li><a href="{%url 'withdraw' account.pk %}" class="btn btn-secondary">Withdraw</a></li>
-      <li><a class="btn btn-dark" href="{%url 'deposit' account.pk %}">Deposit</a></li>
+
+  <div class="dropdown">
+    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+      Menu
+    </a>
+
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      <li><a class="dropdown-item" href="{%url 'withdraw' account.pk %}">Withdraw</a></li>
+      <li><a class="dropdown-item" href="{%url 'deposit' account.pk %}">Deposit</a></li>
+      <li><a class="dropdown-item" href="{%url 'statement' account.pk %}"</a>Mini_statement</li>
+        <li><a class="dropdown-item"  href="{%url 'delete' account.pk %}"</a>Delete</li>
+          <li><a class="dropdown-item" href="{%url 'loan' account.pk%}"</a>Request Loan</li>
     </ul>
   </div>
-</div>
-          </td>
-          <td><a href="{%url 'statement' account.pk %}" class="btn btn-secondary">Mini_statement</a></td>
-          <td><a href="{%url 'delete' account.pk %}" class="btn btn-secondary">Delete</a></td>
-          <td><a href="{%url 'loan' account.pk%}" class="btn btn-dark">Request Loan</a></td>
         </tr>
         {% endfor %}
 

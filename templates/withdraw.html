@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-<section class="container">
+<div class="container d-flex justify-content-center">
   <div class="d-flex flex-column">
+    <div style="height:30vh" class=""></div>
     <form class="" method="post">
       {% csrf_token %}
        {{form}}
-       <button type="submit" name="button">Withdraw</button>
+       <div class="d-flex justify-content-end">
+         <button class="mt-3 btn btn-primary btn-block" type="submit" name="button">Withdraw</button>
+       </div>
     </form>
 
 </div>
-</section>
+</div>
 {% endblock%}

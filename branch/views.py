@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Customer,Loan, Account,Transaction
+from django.contrib.auth.models import User
 from django.views.generic import UpdateView, ListView
 from .forms import AccountForm, LoanForm, CustomerForm, TransactForm
 from django.utils.decorators import method_decorator
@@ -17,43 +18,48 @@ def home(request):
         {"accounts":accounts, "loans":loans}
     )
 
+def index(request):
+    return render(request, 'index.html')
+
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
-
 def create(request):
-    customer = Customer.objects.filter(user=request.user)[0]
+    accounts = Account.objects.filter(customer__user=request.user)
+    user = get_object_or_404(User,username__iexact=request.user)
     if request.method == 'POST':
+        customer, created = Customer.objects.get_or_create(user=request.user)
         Account.objects.create(
-        name = random_string_generator(),
-        customer = customer,
-        balance = 0
+            name = random_string_generator(),
+            customer = customer,
+            balance = 0
         )
-        return HttpResponse('Account created successfully')
+        return render(request, 'created.html',{'accounts':accounts})
 
     else:
         pass
     return render(request,'create.html')
 
+
 def request_loan(request,pk):
     account = get_object_or_404(Account, pk=pk)
     loans = Loan.objects.filter(customer__user=request.user)
     customer = Customer.objects.filter(user=request.user)[0]
+    # amount = Loan.amount
     if request.method == 'POST':
         form = LoanForm(request.POST)
         if form.is_valid():
             amount = request.POST.get('amount')
             duration = request.POST.get('duration')
-            amo = Decimal(amount)
-            print(amo)
-            form.save()
+
             Loan.objects.create(
-            amount=amo,
+            amount=amount,
             duration=duration,
             customer=customer,
             pending=True
             )
-            return render(request,'loan_requested.html', {'form':form, "loans":loans,"account":account})
+            form.save()
+            return render(request,'loan_requested.html', {'form':form, "loans":loans,"amount":amount, "account":account})
     if request.method == 'GET':
         form=LoanForm()
     return render(request,'request_loan.html', {'form':form, "loans":loans,"account":account})
@@ -129,7 +135,11 @@ def statement(request,pk):
         transactions = Transaction.objects.filter(account=account)
         return render(request, 'statement.html', { 'account':account, 'transactions':transactions})
 
-
+def loan_statement(request,pk):
+    account = get_object_or_404(Account, pk=pk)
+    loans = Loan.objects.filter(customer__user=request.user)
+    if request.method == 'GET':
+        return render(request, 'loan_statement.html', { 'account':account, 'loans':loans})
 
 
 

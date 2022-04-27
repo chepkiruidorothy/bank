@@ -1,44 +1,18 @@
 {% extends 'base.html' %}
-{% block title %} Welcome to account {% endblock %}
 {% block content %}
-{% csrf_token %}
-<div class="container">
+<div class="container d-flex justify-content-center">
+<div class="d-inline-flex justify-content-center flex-column ">
+  <div style="height:30vh">
 
-
-
-  <h2>Do you want to create a new account?</h2>
-  <p>  By agreeing to open a bank account, you agree to the terms and condiions.</p>
-<div class="d-flex justify-content-center">
-
-  <a type="button" class="btn btn-secondary" href="{% url 'home'%}"> No</a>
-<form class=""  method="post">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-primary ml-3">Yes</button>
-</form>
-
-</div>
-
-
-
-
-
-
-<!-- <form action="" method="post">
-  {% csrf_token %}
-  <div class="row justify-content-center">
-    <div class="col-6">
-
-
-      {{ form.non_field_errors }}
-      <div class="form-group">
-        {{form.errors}}
-        {{form.label_tag}}
-        {{form}}
-
-      </div>
-      <hr class="mb-3">
-      <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
-    </div>
   </div>
-</form> -->
-{% endblock %}
+    <form method="POST">
+        <!-- Security token by Django -->
+        {% csrf_token %}
+
+        Are you want create an account? ?
+        <input class="btn btn-primary" type="submit" value="Yes" />
+        <a href="{% url 'home'%}">Cancel </a>
+    </form>
+</div>
+</div>
+{% endblock%}
