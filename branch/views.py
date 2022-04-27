@@ -45,7 +45,6 @@ def request_loan(request,pk):
     account = get_object_or_404(Account, pk=pk)
     loans = Loan.objects.filter(customer__user=request.user)
     customer = Customer.objects.filter(user=request.user)[0]
-    # amount = Loan.amount
     if request.method == 'POST':
         form = LoanForm(request.POST)
         if form.is_valid():
