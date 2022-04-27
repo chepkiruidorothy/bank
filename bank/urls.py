@@ -27,8 +27,9 @@ urlpatterns = [
     path('accounts/delete/<int:pk>',views.delete,name='delete'),
     path('accounts/withdraw/<int:pk>/',views.withdraw,name='withdraw'),
     path('accounts/statement/<int:pk>/',views.statement,name='statement'),
+    path('accounts/send_money/<int:pk>/',views.send_money,name='send_money'),
     path('accounts/loan_statement/<int:pk>/',views.loan_statement,name='loan_statement'),
     path('accounts/deposit/<int:pk>/',views.deposit,name='deposit'),
-    path('loans/loan/<int:pk>/', views.request_loan, name='loan'),
+    path('accounts/loan/<int:pk>/', views.request_loan, name='loan'),
     path('accounts/', include('allauth.urls')),
 ]

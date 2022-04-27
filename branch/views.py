@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Customer,Loan, Account,Transaction
 from django.contrib.auth.models import User
 from django.views.generic import UpdateView, ListView
-from .forms import AccountForm, LoanForm, CustomerForm, TransactForm, TransForm
+from .forms import  TransactForm, LoanForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required, login_required
 import random
@@ -43,11 +43,15 @@ def create(request):
 
 
 def request_loan(request,pk):
+    form=LoanForm()
     account = get_object_or_404(Account, pk=pk)
     loans = Loan.objects.filter(customer__user=request.user)
     user = get_object_or_404(User,username__iexact=request.user)
+    customer = Customer.objects.filter(user=request.user)[0]
+    if request.method == 'GET':
+        return render(request,'request_loan.html', {'form':form, "loans":loans,"account":account})
     if request.method == 'POST':
-        form = TransForm(request.POST)
+        form=LoanForm(request.POST)
         if form.is_valid():
             amount = request.POST.get('amount')
             duration = request.POST.get('duration')
@@ -60,9 +64,8 @@ def request_loan(request,pk):
             )
 
             return render(request,'loan_requested.html', {'form':form, "loans":loans,"amount":amount, "account":account})
-    if request.method == 'GET':
-        form=TransForm()
-    return render(request,'request_loan.html', {'form':form, "loans":loans,"account":account})
+    else:
+        return render(request,'request_loan.html', {'form':form, "loans":loans,"account":account})
 
 
 def withdraw(request,pk):
@@ -141,7 +144,22 @@ def loan_statement(request,pk):
     if request.method == 'GET':
         return render(request, 'loan_statement.html', { 'account':account, 'loans':loans})
 
-
+def send_money(request, pk):
+    form=TransactForm()
+    account = get_object_or_404(Account, pk=pk)
+    balance = account.balance
+    customer = Customer.objects.filter(user=request.user)[0]
+    if request.method == "GET":
+        return render(request,'transfer.html', {'form':form, "account":account})
+    if request.method == "POST":
+        form = TransactForm(request.POST)
+        if form.is_valid:
+            amount = request.POST.get('amount')
+            amo = Decimal(amount)
+            if form.is_valid:
+                if (balance <= amo):
+                    return render(request, 'cannot_withdraw.html')
+                # else:
 
 def delete(request,pk):
     account = get_object_or_404(Account, pk=pk)
