@@ -26,3 +26,8 @@ class CustomerForm(forms.ModelForm):
 class TransactForm(forms.Form):
 
     amount= forms.DecimalField( label='Amount ', widget = forms.TextInput(attrs={'class':'form-control'}))
+
+class TransForm(forms.Form):
+
+    amount= forms.DecimalField( label='Amount ', widget = forms.TextInput(attrs={'class':'form-control'}))
+    duration=forms.IntegerField(label='Duration', widget = forms.TextInput(attrs={'class':'form-control'}))

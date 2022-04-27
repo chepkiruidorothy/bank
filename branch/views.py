@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Customer,Loan, Account,Transaction
 from django.contrib.auth.models import User
 from django.views.generic import UpdateView, ListView
-from .forms import AccountForm, LoanForm, CustomerForm, TransactForm
+from .forms import AccountForm, LoanForm, CustomerForm, TransactForm, TransForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required, login_required
 import random
@@ -36,6 +36,7 @@ def create(request):
         )
         return render(request, 'created.html',{'accounts':accounts})
 
+        customer = Customer.objects.filter(user=request.user)[0]
     else:
         pass
     return render(request,'create.html')
@@ -44,9 +45,9 @@ def create(request):
 def request_loan(request,pk):
     account = get_object_or_404(Account, pk=pk)
     loans = Loan.objects.filter(customer__user=request.user)
-    customer = Customer.objects.filter(user=request.user)[0]
+    user = get_object_or_404(User,username__iexact=request.user)
     if request.method == 'POST':
-        form = LoanForm(request.POST)
+        form = TransForm(request.POST)
         if form.is_valid():
             amount = request.POST.get('amount')
             duration = request.POST.get('duration')
@@ -57,10 +58,10 @@ def request_loan(request,pk):
             customer=customer,
             pending=True
             )
-            form.save()
+
             return render(request,'loan_requested.html', {'form':form, "loans":loans,"amount":amount, "account":account})
     if request.method == 'GET':
-        form=LoanForm()
+        form=TransForm()
     return render(request,'request_loan.html', {'form':form, "loans":loans,"account":account})
 
 
