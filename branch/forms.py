@@ -15,3 +15,4 @@ class LoanForm(forms.Form):
 class TransferForm(forms.Form):
 
     amount= forms.DecimalField( label='Amount ', widget = forms.TextInput(attrs={'class':'form-control'}))
+    name  =forms.CharField( label='name', widget = forms.TextInput(attrs={'class':'form-control'}))

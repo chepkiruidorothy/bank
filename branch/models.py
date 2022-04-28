@@ -27,6 +27,7 @@ class Account(models.Model):
     balance=models.DecimalField( max_digits=12, decimal_places=2)
     customer=models.ForeignKey(Customer, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add = True)
+    
     def __str__(self):
         return self.name
 
@@ -34,6 +35,7 @@ class Transaction(models.Model):
         CHOICES=(
             ('WD', 'Withdrawal'),
             ( 'DP','Deposit'),
+            ( 'TF','Transfer'),
             )
         amount=models.DecimalField(max_digits=12, decimal_places=2)
         type=models.CharField(max_length=30, choices = CHOICES)

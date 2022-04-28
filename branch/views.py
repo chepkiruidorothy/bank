@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Customer,Loan, Account,Transaction
 from django.contrib.auth.models import User
 from django.views.generic import UpdateView, ListView
-from .forms import  TransactForm, LoanForm
+from .forms import  TransactForm, LoanForm, TransferForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required, login_required
 import random
@@ -145,21 +145,53 @@ def loan_statement(request,pk):
         return render(request, 'loan_statement.html', { 'account':account, 'loans':loans})
 
 def send_money(request, pk):
-    form=TransactForm()
+    form=TransferForm()
     account = get_object_or_404(Account, pk=pk)
     balance = account.balance
+    user = get_object_or_404(User,username__iexact=request.user)
+    accounter = Account.objects.filter(customer__user = user)
+    to_accounts = Transaction.objects.filter(to_account__customer__user = request.user)
+    accounts = Transaction.objects.filter(account__customer__user = user)
     customer = Customer.objects.filter(user=request.user)[0]
+    cust=Customer.objects.all()
+    print(customer)
+    print(cust)
+
     if request.method == "GET":
         return render(request,'transfer.html', {'form':form, "account":account})
     if request.method == "POST":
-        form = TransactForm(request.POST)
+        form = TransferForm(request.POST)
         if form.is_valid:
             amount = request.POST.get('amount')
+            name = request.POST.get('name')
             amo = Decimal(amount)
-            if form.is_valid:
-                if (balance <= amo):
-                    return render(request, 'cannot_withdraw.html')
-                # else:
+            print(name)
+
+            balances = account.balance
+            print(balances)
+            if (balance <= amo):
+                return render(request, 'cannot_send.html')
+            if name in cust:
+                return HttpResponse("no")
+            else:
+                transfer = Transaction.objects.create(
+                amount=amo,
+                type='Transfer',
+                account= account,
+                to_account =account
+                )
+                transfer.save()
+                balance -= amo
+                account.balance = balance
+                balances += amo
+                to_account.balance = balances
+                account.save()
+                to_account.save()
+                return render(request, 'transferred.html',{'balance':balance, 'balances':balances,"to_account":to_account,"account":account})
+    else:
+        return render(request,'transfer.html', {'form':form, "account":account})
+
+
 
 def delete(request,pk):
     account = get_object_or_404(Account, pk=pk)
