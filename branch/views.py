@@ -14,21 +14,25 @@ from decimal import Decimal
 def home(request):
     accounts = Account.objects.filter(customer__user = request.user)
     loans = Loan.objects.filter(name=request.user)
-    return render(request, 'home.html',
-        {"accounts":accounts, "loans":loans}
-    )
+    return render(request, 'home.html',{"accounts":accounts, "loans":loans})
 
 def index(request):
     return render(request, 'index.html')
 
-def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
+def randomGen():
+    # return a 6 digit random number
+    return (random.uniform(100000, 999999))
+
+def random_string_generator(size=4, chars=string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 def create(request):
     accounts = Account.objects.filter(customer__user=request.user)
     user = get_object_or_404(User,username__iexact=request.user)
     if request.method == 'POST':
+
         customer, created = Customer.objects.get_or_create(user=request.user)
+        print(customer)
         Account.objects.create(
             name = random_string_generator(),
             customer = customer,
@@ -149,47 +153,41 @@ def send_money(request, pk):
     account = get_object_or_404(Account, pk=pk)
     balance = account.balance
     user = get_object_or_404(User,username__iexact=request.user)
-    accounter = Account.objects.filter(customer__user = user)
-    to_accounts = Transaction.objects.filter(to_account__customer__user = request.user)
-    accounts = Transaction.objects.filter(account__customer__user = user)
     customer = Customer.objects.filter(user=request.user)[0]
-    cust=Customer.objects.all()
-    print(customer)
-    print(cust)
-
     if request.method == "GET":
         return render(request,'transfer.html', {'form':form, "account":account})
     if request.method == "POST":
         form = TransferForm(request.POST)
         if form.is_valid:
             amount = request.POST.get('amount')
-            name = request.POST.get('name')
+            acc_name = request.POST.get('acc_name')
             amo = Decimal(amount)
-            print(name)
+            to_account = Account.objects.get(name=acc_name)
+            balances = to_account.balance
 
-            balances = account.balance
-            print(balances)
             if (balance <= amo):
                 return render(request, 'cannot_send.html')
-            if name in cust:
-                return HttpResponse("no")
+            # if name not in acc_name:
+            #     return HttpResponse("no")
             else:
                 transfer = Transaction.objects.create(
-                amount=amo,
-                type='Transfer',
-                account= account,
-                to_account =account
-                )
+                    amount=amo,
+                    type='Transfer',
+                    account= account,
+                    to_account =to_account
+                    )
                 transfer.save()
+                print(to_account)
                 balance -= amo
                 account.balance = balance
                 balances += amo
-                to_account.balance = balances
+                to_account.balances = balances
                 account.save()
                 to_account.save()
+
                 return render(request, 'transferred.html',{'balance':balance, 'balances':balances,"to_account":to_account,"account":account})
     else:
-        return render(request,'transfer.html', {'form':form, "account":account})
+        return render(request,'transfer.html', {'form':form, "account":account,"to_account":to_account})
 
 
 

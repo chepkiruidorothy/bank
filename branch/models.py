@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+
 class Customer(models.Model):
     user=models.OneToOneField(User, unique=True, default='', on_delete=models.CASCADE)
 
@@ -23,11 +24,11 @@ class Loan(models.Model):
 
 
 class Account(models.Model):
-    name=models.CharField(max_length=30,default="")
+    name = models.CharField(max_length=30, unique=True, default='')
     balance=models.DecimalField( max_digits=12, decimal_places=2)
     customer=models.ForeignKey(Customer, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add = True)
-    
+
     def __str__(self):
         return self.name
 
