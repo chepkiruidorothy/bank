@@ -5,9 +5,10 @@
   <div style="height:30vh">
   </div>
   <form class="" action="" method="post">
+    <a  href="{%url 'home' %}" type="submit" name="button">Home</a>
+      <a  href="{%url 'statement' account.pk %}" class="btn btn-secondary" type="submit" name="button">Statement</a>
     <h1>Transaction complete. Your balance is {{balance}}</h1>
-    {{balances}}
-    <a  href="{%url 'statement' account.pk %}" type="submit" name="button">Statement</a>
+
   </form>
 </div>
 </div>

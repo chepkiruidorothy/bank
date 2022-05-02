@@ -159,16 +159,20 @@ def send_money(request, pk):
     if request.method == "POST":
         form = TransferForm(request.POST)
         if form.is_valid:
+
             amount = request.POST.get('amount')
             acc_name = request.POST.get('acc_name')
             amo = Decimal(amount)
+            if account.name not in acc_name:
+                return render(request, 'account_not_found.html')
             to_account = Account.objects.get(name=acc_name)
             balances = to_account.balance
+            print(account.name)
+            print(acc_name)
 
             if (balance <= amo):
                 return render(request, 'cannot_send.html')
-            # if name not in acc_name:
-            #     return HttpResponse("no")
+
             else:
                 transfer = Transaction.objects.create(
                     amount=amo,
@@ -181,7 +185,7 @@ def send_money(request, pk):
                 balance -= amo
                 account.balance = balance
                 balances += amo
-                to_account.balances = balances
+                to_account.balance = balances
                 account.save()
                 to_account.save()
 
