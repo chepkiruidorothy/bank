@@ -163,10 +163,11 @@ def send_money(request, pk):
             amount = request.POST.get('amount')
             acc_name = request.POST.get('acc_name')
             amo = Decimal(amount)
-            if account.name not in acc_name:
+            try:
+                to_account = Account.objects.get(name=acc_name)
+            except Account.DoesNotExist:
                 return render(request, 'account_not_found.html')
-            to_account = Account.objects.get(name=acc_name)
-            balances = to_account.balance
+            to_account_balance = to_account.balance
             print(account.name)
             print(acc_name)
 
@@ -184,12 +185,12 @@ def send_money(request, pk):
                 print(to_account)
                 balance -= amo
                 account.balance = balance
-                balances += amo
-                to_account.balance = balances
+                to_account_balance += amo
+                to_account.balance = to_account_balance
                 account.save()
                 to_account.save()
 
-                return render(request, 'transferred.html',{'balance':balance, 'balances':balances,"to_account":to_account,"account":account})
+                return render(request, 'transferred.html',{'balance':balance, 'to_account_balance':to_account_balance,"to_account":to_account,"account":account})
     else:
         return render(request,'transfer.html', {'form':form, "account":account,"to_account":to_account})
 
