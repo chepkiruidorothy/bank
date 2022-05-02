@@ -168,9 +168,6 @@ def send_money(request, pk):
             except Account.DoesNotExist:
                 return render(request, 'account_not_found.html')
             to_account_balance = to_account.balance
-            print(account.name)
-            print(acc_name)
-
             if (balance <= amo):
                 return render(request, 'cannot_send.html')
 
