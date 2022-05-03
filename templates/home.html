@@ -5,6 +5,7 @@ Bank
 {% endblock %}
 
   {% block content%}
+  <a href="{% url 'dashboard'%}"> Dashboard</a>
 <div class="container">
 
 
@@ -28,6 +29,7 @@ Bank
       </thead>
 
       <tbody>
+
         {% for account in accounts %}
         <tr>
           <th scope="row">{{account.name}}</th>

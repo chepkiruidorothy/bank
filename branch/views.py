@@ -9,12 +9,16 @@ from django.contrib.auth.decorators import permission_required, login_required
 import random
 import string
 from decimal import Decimal
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncMonth
 
 @login_required
 def home(request):
     accounts = Account.objects.filter(customer__user = request.user)
+    total_amount = Account.objects.aggregate(sum=Sum ('balance') )
     loans = Loan.objects.filter(name=request.user)
-    return render(request, 'home.html',{"accounts":accounts, "loans":loans})
+    total_loans = Loan.objects.aggregate(sum=Sum ('amount') )
+    return render(request, 'home.html',{"accounts":accounts, "total_loans":total_loans, "total_amount":total_amount,"loans":loans})
 
 def index(request):
     return render(request, 'index.html')
@@ -205,3 +209,19 @@ def delete(request,pk):
         account.delete()
         return HttpResponseRedirect("/")
     return render(request,'delete.html')
+
+
+def dashboard(request):
+    accounts = Account.objects.filter(customer__user = request.user)
+    total_amount = Account.objects.aggregate(sum=Sum ('balance') )
+    loans = Loan.objects.filter(name=request.user)
+    total_loans = Loan.objects.aggregate(sum=Sum ('amount') )
+    total_withdraw = Transaction.objects.filter(type='Withdrawal').aggregate(sum=Sum ('amount') )
+    total_deposited = Transaction.objects.filter(type='Deposit').aggregate(sum=Sum ('amount') )
+    total_transferred= Transaction.objects.filter(type='Transfer').aggregate(sum=Sum ('amount') )
+    monthly_withdrawals = Transaction.objects.filter(type='Withdrawal').annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
+    monthly_deposits= Transaction.objects.filter(type='Deposit').annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
+    monthly_transfers= Transaction.objects.filter(type='Transfer').annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
+    loans_monthly = Loan.objects.annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
+    accounts_monthly = Account.objects.annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('balance')).values('month','sum','c')
+    return render(request, 'dashboard.html',{"accounts":accounts,"total_withdraw":total_withdraw,"total_transferred":total_transferred, "total_deposited":total_deposited, "loans_monthly":loans_monthly,"monthly_transfers":monthly_transfers, "monthly_deposits":monthly_deposits, "monthly_withdrawals":monthly_withdrawals, "accounts_monthly":accounts_monthly , "total_loans":total_loans, "total_amount":total_amount,"loans":loans})
