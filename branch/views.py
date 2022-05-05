@@ -174,7 +174,7 @@ def send_money(request, pk):
             except Account.DoesNotExist:
                 return render(request, 'account_not_found.html')
             to_account_balance = to_account.balance
-            if (balance <= amo):
+            if (balance < amo):
                 return render(request, 'cannot_send.html')
 
             else:
@@ -214,6 +214,7 @@ def delete(request,pk):
 
 
 def dashboard(request):
+    accounts = Account.objects.filter(customer__user = request.user)
     total_amount = Account.objects.filter(customer__user = request.user).aggregate(sum=Sum ('balance') )
     total_loans = Loan.objects.filter(customer__user = request.user).aggregate(sum=Sum ('amount') )
     total_withdraw = Transaction.objects.filter(type='Withdrawal').filter(account__customer__user=request.user).aggregate(sum=Sum ('amount') )
@@ -224,4 +225,4 @@ def dashboard(request):
     monthly_transfers= Transaction.objects.filter(type='Transfer').filter(account__customer__user=request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
     loans_monthly = Loan.objects.filter(customer__user = request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
     accounts_monthly = Account.objects.filter(customer__user = request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('balance')).values('month','sum','c')
-    return render(request, 'dashboard.html',{"total_withdraw":total_withdraw,"total_transferred":total_transferred, "total_deposited":total_deposited, "loans_monthly":loans_monthly,"monthly_transfers":monthly_transfers, "monthly_deposits":monthly_deposits, "monthly_withdrawals":monthly_withdrawals, "accounts_monthly":accounts_monthly , "total_loans":total_loans, "total_amount":total_amount})
+    return render(request, 'dashboard.html',{"accounts":accounts, "total_withdraw":total_withdraw,"total_transferred":total_transferred, "total_deposited":total_deposited, "loans_monthly":loans_monthly,"monthly_transfers":monthly_transfers, "monthly_deposits":monthly_deposits, "monthly_withdrawals":monthly_withdrawals, "accounts_monthly":accounts_monthly , "total_loans":total_loans, "total_amount":total_amount})
