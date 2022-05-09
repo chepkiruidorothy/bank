@@ -18,9 +18,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 @login_required
 def home(request):
     accounts_list = Account.objects.filter(customer__user = request.user).order_by('timestamp')
-    total_amount = Account.objects.aggregate(sum=Sum ('balance') )
-    loans = Loan.objects.filter(name=request.user)
-    total_loans = Loan.objects.aggregate(sum=Sum ('amount') )
 
     page = request.GET.get('page', 1)
     paginator = Paginator(accounts_list, per_page=3)
@@ -30,14 +27,21 @@ def home(request):
         accounts = paginator.page(1)
     except EmptyPage:
         accounts = paginator.page(paginator.num_pages)
-    return render(request, 'home.html',{ "accounts":accounts, "total_loans":total_loans, "total_amount":total_amount,"loans":loans})
+    total_amount = Account.objects.filter(customer__user = request.user).aggregate(sum=Sum ('balance') )
+    total_loans = Loan.objects.filter(customer__user = request.user).aggregate(sum=Sum ('amount') )
+    total_withdraw = Transaction.objects.filter(type='Withdrawal').filter(account__customer__user=request.user).aggregate(sum=Sum ('amount') )
+    total_deposited = Transaction.objects.filter(type='Deposit').filter(account__customer__user=request.user).aggregate(sum=Sum ('amount') )
+    total_transferred= Transaction.objects.filter(type='Transfer').filter(account__customer__user=request.user).aggregate(sum=Sum ('amount') )
+    monthly_withdrawals = Transaction.objects.filter(type='Withdrawal').filter(account__customer__user=request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
+    monthly_deposits= Transaction.objects.filter(type='Deposit').filter(account__customer__user=request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
+    monthly_transfers= Transaction.objects.filter(type='Transfer').filter(account__customer__user=request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
+    loans_monthly = Loan.objects.filter(customer__user = request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
+    accounts_monthly = Account.objects.filter(customer__user = request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('balance')).values('month','sum','c')
+    return render(request, 'home.html',{"accounts":accounts, "total_withdraw":total_withdraw,"total_transferred":total_transferred, "total_deposited":total_deposited, "loans_monthly":loans_monthly,"monthly_transfers":monthly_transfers, "monthly_deposits":monthly_deposits, "monthly_withdrawals":monthly_withdrawals, "accounts_monthly":accounts_monthly , "total_loans":total_loans, "total_amount":total_amount})
+
 
 def index(request):
     return render(request, 'index.html')
-
-def randomGen():
-    # return a 6 digit random number
-    return (random.uniform(100000, 999999))
 
 def random_string_generator(size=4, chars=string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -221,18 +225,3 @@ def delete(request,pk):
         account.delete()
         return HttpResponseRedirect("/")
     return render(request,'delete.html')
-
-
-def dashboard(request):
-    accounts = Account.objects.filter(customer__user = request.user)
-    total_amount = Account.objects.filter(customer__user = request.user).aggregate(sum=Sum ('balance') )
-    total_loans = Loan.objects.filter(customer__user = request.user).aggregate(sum=Sum ('amount') )
-    total_withdraw = Transaction.objects.filter(type='Withdrawal').filter(account__customer__user=request.user).aggregate(sum=Sum ('amount') )
-    total_deposited = Transaction.objects.filter(type='Deposit').filter(account__customer__user=request.user).aggregate(sum=Sum ('amount') )
-    total_transferred= Transaction.objects.filter(type='Transfer').filter(account__customer__user=request.user).aggregate(sum=Sum ('amount') )
-    monthly_withdrawals = Transaction.objects.filter(type='Withdrawal').filter(account__customer__user=request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
-    monthly_deposits= Transaction.objects.filter(type='Deposit').filter(account__customer__user=request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
-    monthly_transfers= Transaction.objects.filter(type='Transfer').filter(account__customer__user=request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
-    loans_monthly = Loan.objects.filter(customer__user = request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('amount')).values('month','sum','c')
-    accounts_monthly = Account.objects.filter(customer__user = request.user).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Sum('balance')).values('month','sum','c')
-    return render(request, 'dashboard.html',{"accounts":accounts, "total_withdraw":total_withdraw,"total_transferred":total_transferred, "total_deposited":total_deposited, "loans_monthly":loans_monthly,"monthly_transfers":monthly_transfers, "monthly_deposits":monthly_deposits, "monthly_withdrawals":monthly_withdrawals, "accounts_monthly":accounts_monthly , "total_loans":total_loans, "total_amount":total_amount})
