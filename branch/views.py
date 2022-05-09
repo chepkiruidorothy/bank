@@ -11,16 +11,26 @@ import string
 from decimal import Decimal
 from django.db.models import Sum, Count
 from django.db.models.functions import TruncMonth
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
 @login_required
 def home(request):
-    accounts = Account.objects.filter(customer__user = request.user)
+    accounts_list = Account.objects.filter(customer__user = request.user).order_by('timestamp')
     total_amount = Account.objects.aggregate(sum=Sum ('balance') )
     loans = Loan.objects.filter(name=request.user)
     total_loans = Loan.objects.aggregate(sum=Sum ('amount') )
-    return render(request, 'home.html',{"accounts":accounts, "total_loans":total_loans, "total_amount":total_amount,"loans":loans})
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(accounts_list, per_page=3)
+    try:
+        accounts = paginator.page(page)
+    except PageNotAnInteger:
+        accounts = paginator.page(1)
+    except EmptyPage:
+        accounts = paginator.page(paginator.num_pages)
+    return render(request, 'home.html',{ "accounts":accounts, "total_loans":total_loans, "total_amount":total_amount,"loans":loans})
 
 def index(request):
     return render(request, 'index.html')

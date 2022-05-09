@@ -1,14 +1,126 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Bank
-{% endblock %}
-
   {% block content%}
+  <div class="container d-flex d-flex-column justify-content-center ">
+
+  {% block title %}  {{user}}'s Dashboard
+
+  {% endblock %}
+
+  </div>
+
+  <!-- Specific Page CSS goes HERE  -->
+  {% block stylesheets %}{% endblock stylesheets %}
+
+      <div class="row">
+          <div class="col-12 col-sm-6 col-xl-4 mb-4">
+              <div class="card border-0 shadow">
+                  <div class="card-body">
+                      <div class="row d-block d-xl-flex align-items-center">
+                          <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                              <div class="icon-shape icon-shape-primary rounded me-4 me-sm-0">
+                                  <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
+                              </div>
+                          </div>
+                          <div class="col-12 col-xl-7 px-xl-0">
+                              <div class="d-none d-sm-block">
+                                  <h2 class="h6 text-gray-400 mb-0" style="color:blue">Total balances</h2>
+                                  <h3 class="fw-extrabold mb-2" style="color:green" >${{total_amount.sum}}</h3>
+                                  <div class="">
+                                    {%for account_monthly  in accounts_monthly %}
+                                    <p> From {{account_monthly.month}}:</p>
+                                    <p style="color:green" >{{account_monthly.sum}}</p>
+
+                                    {% endfor%}
+
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-12 col-sm-6 col-xl-4 mb-4">
+              <div class="card border-0 shadow">
+                  <div class="card-body">
+                      <div class="row d-block d-xl-flex align-items-center">
+                          <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                              <div class="icon-shape icon-shape-secondary rounded me-4 me-sm-0">
+                                  <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path></svg>
+                              </div>
+                          </div>
+                          <div class="col-12 col-xl-7 px-xl-0">
+                              <div class="d-none d-sm-block">
+                                <h2 class="h6 text-gray-400 mb-0" style="color:blue">Total loans</h2>
+                                <h3 class="fw-extrabold mb-2" style="color:red" >${{total_loans.sum}}</h3>
+                                <div class="">
+                                  {%for loan_monthly  in loans_monthly %}
+                                  <p>From {{loan_monthly.month}}:</p>
+                                  <p style="color:red" >{{loan_monthly.sum}}</p>
+                                  {% endfor%}
+                                </div>
+                            </div>
+                            <div class="d-none d-sm-block">
+                                <h2 class="h6 text-gray-400 mb-0" style="color:blue"> Total withdrawals</h2>
+                                <h3 class="fw-extrabold mb-2" style="color:red">${{total_withdraw.sum}}</h3>
+                            </div>
+                            <small class="text-gray-500">
+                              {% for monthly_withdrawal in monthly_withdrawals%}
+                                <p> From {{monthly_withdrawal.month}}:</p>
+                                <p style="color:red">{{monthly_withdrawal.sum}}</p>
+                                {% endfor%}
+                            </small>
+                                </div>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          <div class="col-12 col-sm-6 col-xl-4 mb-4">
+              <div class="card border-0 shadow">
+                  <div class="card-body">
+                      <div class="row d-block d-xl-flex align-items-center">
+                          <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                              <div class="icon-shape icon-shape-tertiary rounded me-4 me-sm-0">
+                                  <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                              </div>
+
+                          </div>
+                          <div class="col-12 col-xl-7 px-xl-0">
+
+                              <div class="d-none d-sm-block">
+                                  <h2 class="h6 text-gray-400 mb-0" style="color:blue"> Total deposits</h2>
+                                  <h3 class="fw-extrabold mb-2"  style="color:green">${{total_deposited.sum}}</h3>
+
+                              </div>
+                              <small class="text-gray-500">
+                                {% for monthly_deposit in monthly_deposits%}
+                                <p>From {{monthly_deposit.month}}:</p>
+                                <p style="color:green">{{monthly_deposit.sum}}</p>
+                                  {% endfor%}
+                              </small>
+                              <div class="d-none d-sm-block">
+                                  <h2 class="h6 text-gray-400 mb-0" style="color:blue"> Total money send</h2>
+                                  <h3 class="fw-extrabold mb-2"  style="color:green">${{total_transferred.sum}}</h3>
+
+                              </div>
+                              <small class="text-gray-500">
+                                {% for monthly_transfer in monthly_transfers%}
+                                  <p> From {{monthly_transfer.month}}:</p>
+                                  <p style="color:green">{{monthly_transfer.sum}}</p>
+                                  {% endfor%}
+                              </small>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
 
 <div class="container">
-
-<a class="btn btn-secondary mt-3 ml-auto" href="{% url 'dashboard'%}"> Dashboard</a>
 
       <div class="mt-3 row">
   <div class="card" >
@@ -41,14 +153,14 @@ Bank
       Menu
     </a>
 
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <ol class="dropdown-menu" aria-labelledby="dropdownMenuLink">
       <li><a class="dropdown-item" href="{%url 'withdraw' account.pk %}">Withdraw</a></li>
         <li><a class="dropdown-item" href="{%url 'deposit' account.pk %}">Deposit</a></li>
           <li><a class="dropdown-item" href="{%url 'statement' account.pk %}"</a>Mini_statement</li>
             <li><a class="dropdown-item"  href="{%url 'delete' account.pk %}"</a>Delete</li>
               <li><a class="dropdown-item" href="{%url 'loan' account.pk%}"</a>Request Loan</li>
               <li><a class="dropdown-item" href="{%url 'send_money' account.pk%}"</a>Send Money </li>
-    </ul>
+    </ol>
   </div>
   </td>
         </tr>
@@ -61,4 +173,6 @@ Bank
 </div>
 </div>
 </div>
+
+{% include 'includes/pagination.html'%}
 {% endblock%}
