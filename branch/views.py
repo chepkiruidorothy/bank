@@ -10,7 +10,7 @@ import random
 import string
 from decimal import Decimal
 from django.db.models import Sum, Count
-from django.db.models.functions import TruncMonth
+from django.db.models.functions import TruncMonth,Coalesce
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
