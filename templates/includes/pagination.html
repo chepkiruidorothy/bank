@@ -1,11 +1,11 @@
-<nav aria-label="Page navigation example">
+<nav aria-label="Page navigation">
+
 {% if accounts.has_other_pages %}
   <ul class="pagination justify-content-center">
-    {% if accounts.has_previous %}
-
-      <li class="page-item"><a  class = "page-link" href="?page={{ accounts.previous_page_number }}">   &laquo;</a></li>
+    <li class="page-item {% if not accounts.has_previous %} disabled {% endif%}">
+      <a  class = "page-link" href="{% if accounts.has_previous %} ?page={{ accounts.previous_page_number }}{% endif%}">   Previous</a></li>
     {% else %}
-      <li class=" page-item disabled"><span>&laquo;</span></li>
+      <li class=" page-item disabled"><span></span></li>
     {% endif %}
     {% for i in accounts.paginator.page_range %}
       {% if accounts.number == i %}
@@ -14,11 +14,8 @@
         <li><a class = "page-link" href="?page={{ i }}">{{ i }}</a></li>
       {% endif %}
     {% endfor %}
-    {% if accounts.has_next %}
-      <li><a class = "page-link" href="?page={{ accounts.next_page_number }}"> &raquo;</a></li>
-    {% else %}
-      <li class="page-item disabled"><span>&raquo;</span></li>
-    {% endif %}
+    <li class="page-item {% if not accounts.has_next %} disabled {% endif%}">
+      <a  class = "page-link" href="{% if accounts.has_next %} ?page={{ accounts.next_page_number }}{% endif%}">   Next</a></li>
   </ul>
-{% endif %}
+
 </nav>

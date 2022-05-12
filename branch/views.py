@@ -27,6 +27,7 @@ def home(request):
         accounts = paginator.page(1)
     except EmptyPage:
         accounts = paginator.page(paginator.num_pages)
+
     total_amount = Account.objects.filter(customer__user = request.user).aggregate(sum=Coalesce(Sum ('balance'),Decimal(0)) )
     total_loans = Loan.objects.filter(customer__user = request.user).aggregate(sum=Coalesce(Sum ('amount'),Decimal(0)))
     total_withdraw = Transaction.objects.filter(type='Withdrawal').filter(account__customer__user=request.user).aggregate(sum=Coalesce(Sum ('amount'),Decimal(0)) )
@@ -159,14 +160,32 @@ def statement(request,pk):
     account = get_object_or_404(Account, pk=pk)
 
     if request.method == 'GET':
-        transactions = Transaction.objects.filter(account=account)
-        return render(request, 'statement.html', { 'account':account, 'transactions':transactions})
+        transactions = Transaction.objects.filter(account=account).order_by('timestamp')
+        page = request.GET.get('page', 1)
+        paginator = Paginator(transactions, per_page=5)
+        try:
+            accounts = paginator.page(page)
+        except PageNotAnInteger:
+            accounts = paginator.page(1)
+        except EmptyPage:
+            accounts = paginator.page(paginator.num_pages)
+
+        return render(request, 'statement.html', { 'account':account, 'accounts':accounts})
 
 def loan_statement(request,pk):
     account = get_object_or_404(Account, pk=pk)
     loans = Loan.objects.filter(customer__user=request.user)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(loans, per_page=5)
+    try:
+        accounts = paginator.page(page)
+    except PageNotAnInteger:
+        accounts = paginator.page(1)
+    except EmptyPage:
+        accounts = paginator.page(paginator.num_pages)
+
     if request.method == 'GET':
-        return render(request, 'loan_statement.html', { 'account':account, 'loans':loans})
+        return render(request, 'loan_statement.html', { 'account':account, 'accounts':accounts})
 
 def send_money(request, pk):
     form=TransferForm()

@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
+<div class="" style="height:20vh">
+
+</div>
+<div class="container d-flex justify-content-center">
   <form class="" action="" method="post">
 <h1>Your current balance is {{account.balance}}</h1>
-<a href = "{% url 'home'%}" type="submit" name="button">Home</a>
+<a href = "{% url 'home'%}" class="btn btn-primary" type="submit" name="button">Home</a>
     <table class="table">
       <thead>
         <tr>
@@ -14,7 +17,7 @@
       </thead>
 
       <tbody>
-          {% for transaction in transactions%}
+          {% for transaction in accounts%}
         <tr>
           <td class="{% if transaction.type == 'Withdrawal'%} text-danger {%endif%}"> {{transaction.type}}</td>
 
@@ -28,4 +31,5 @@
   </form>
 
 </div>
+{% include 'includes/pagination.html'%}
 {% endblock %}
