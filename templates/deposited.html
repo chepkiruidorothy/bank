@@ -4,9 +4,11 @@
   <div class="d-flex flex-column">
       <div style="height:30vh" class=""></div>
   <form class="" action="" method="post">
-    <h1>Transaction complete. Your balance is {{balance}}</h1>
+      <a href="{%url 'home'  %}" class="btn btn-primary" type="submit" name="button">Home</a>
+        <a href="{%url 'statement' account.pk %}" class="btn btn-secondary" type="submit" name="button">Statement</a>
+    <h2 >Transaction complete. Your balance is  <h3 style="color:green">{{balance}}</h3></h2>
 
-    <a href="{%url 'statement' account.pk %}" type="submit" name="button">Statement</a>
+
   </form>
 
 </div>

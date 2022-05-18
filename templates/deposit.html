@@ -7,7 +7,9 @@
     <form class="" method="post">
       {% csrf_token %}
        {{form}}
+
        <div class="d-flex justify-content-end">
+         <button class="mt-3 btn btn-secondary btn-block" href="{%url 'home'  %}"  type="submit" name="button">Cancel</button>
          <button class="mt-3 btn btn-primary btn-block" type="submit" name="button">Deposit</button>
        </div>
     </form>

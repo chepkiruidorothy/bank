@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% load static%}
+  {% block content%}
+
+  <div class="container d-flex d-flex-column justify-content-center ">
+
+  {% block title %}  {{user}}'s Dashboard
+
+  {% endblock %}
+
+  </div>
+
+  <!-- Specific Page CSS goes HERE  -->
+  {% block stylesheets %}{% endblock stylesheets %}
+
+
+{% include 'list.html'%}
+<!-- Main layout -->
+
+<div class="wrapper">
+    <!--Top menu -->
+    <div class="sidebar" style="height:auto; width:225px; padding: 20px 0; color:yellow; ">
+       <!--profile image & text-->
+        <!--menu item-->
+
+           <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column" id="sidebar">
+            <ul class="nav flex-column text-white w-100">
+
+              <li><a href="{% url 'home'%}" class="nav-link">
+                <span class="mx-2">Home</span></a>
+              </li>
+              {% if account%}
+                  <li <span class="mx-2">><a class="nav-link" href="{%url 'statement' account.pk %}">Mini_statement</a></li>
+                    <li><a class="nav-link"  href="{%url 'delete' account.pk %}">Delete</a></li>
+                      <li><a class="nav-link" href="{%url 'loan' account.pk%}">Request Loan</a></li>
+                      <li><a class="nav-link" href="{%url 'send_money' account.pk%}">Send Money </a></li>
+                        <li><a class="nav-link" href="{%url 'withdraw' account.pk %}">Withdraw</a></li>
+                        <li><a class="nav-link" href="{%url 'deposit' account.pk %}">Deposit</a></li>
+
+                        {%endif%}
+
+              </div>
+
+    </div>
+</div>
+
+
+<main style="margin-top:50px; height:auto; width:auto; padding: 20px 0; "">
+  <div class="pt-4 my-container active-cont d-flex justify-content-center">
+
+    <div class="card-header text-white bg-dark py-2 px-3"></div>
+    <section class="py-5  " style="height:auto" id="dashboard">
+
+      <div class="row  gx-5 h-100">
+          <div class="col-12  col-sm-6 col-xl-4 mb-4">
+              <div class="card border-0 h-100  shadow">
+                  <div class="card-body  ">
+                      <div class=" row d-block d-xl-flex align-items-center">
+                          <div class=" col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center ">
+                          </div>
+                          <div class=" col-12 col-xl-7 px-xl-0">
+
+                                  <h2 class="h6 text-gray-400 mb-0" style="color:blue">Total balances</h2>
+
+                                  <h3 class="fw-extrabold mb-2" style="color:green" >${{total_amount.sum}}</h3>
+                                  <div class="">
+
+                                    {%for account_monthly  in accounts_monthly %}
+                                    <p> From {{account_monthly.month}}:</p>
+                                    <p style="color:green" >{{account_monthly.sum}}</p>
+
+                                    {% endfor%}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-12 col-sm-6 col-xl-4 mb-4">
+              <div class="card border-0 h-100 shadow">
+                  <div class="card-body">
+                      <div class="row d-block d-xl-flex align-items-center">
+                          <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                          </div>
+                          <div class="col-12 col-xl-7 px-xl-0">
+
+                                <h2 class="h6 text-gray-400 mb-0" style="color:blue">Total loans</h2>
+                                <h3 class="fw-extrabold mb-2" style="color:red" >${{total_loans.sum}}</h3>
+                                <div class="">
+                                  {%for loan_monthly  in loans_monthly %}
+                                  <p>From {{loan_monthly.month}}:</p>
+                                  <p style="color:red" >{{loan_monthly.sum}}</p>
+                                  {% endfor%}
+                                </div>
+
+
+                                <h2 class="h6 text-gray-400 mb-0" style="color:blue"> Total withdrawals</h2>
+                                <h3 class="fw-extrabold mb-2" style="color:red">${{total_withdraw.sum}}</h3>
+
+                            <small class="text-gray-500">
+                              {% for monthly_withdrawal in monthly_withdrawals%}
+                                <p> From {{monthly_withdrawal.month}}:</p>
+                                <p style="color:red">{{monthly_withdrawal.sum}}</p>
+                                {% endfor%}
+                            </small>
+                                </div>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          <div class="col-12 col-sm-6 col-xl-4 mb-4">
+              <div class="card border-0 h-100 shadow">
+                  <div class="card-body ">
+                      <div class="row d-block d-xl-flex align-items-center">
+                          <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+      </div>
+                          <div class="col-12 col-xl-7 px-xl-0">
+
+
+                                  <h2 class="h6 text-gray-400 mb-0" style="color:blue"> Total deposits</h2>
+                                  <h3 class="fw-extrabold mb-2"  style="color:green">${{total_deposited.sum}}</h3>
+
+                              <small class="text-gray-500">
+                                {% for monthly_deposit in monthly_deposits%}
+                                <p>From {{monthly_deposit.month}}:</p>
+                                <p style="color:green">{{monthly_deposit.sum}}</p>
+                                  {% endfor%}
+                              </small>
+
+                                  <h2 class="h6 text-gray-400 mb-0" style="color:blue"> Total money send</h2>
+                                  <h3 class="fw-extrabold mb-2"  style="color:green">${{total_transferred.sum}}</h3>
+                              <small class="text-gray-500">
+                                {% for monthly_transfer in monthly_transfers%}
+                                  <p> From {{monthly_transfer.month}}:</p>
+                                  <p style="color:green">{{monthly_transfer.sum}}</p>
+                                  {% endfor%}
+                              </small>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      </section>
+  <a class="btn border-0" id="menu-btn">
+    <i class="bx bx-menu"></i>
+  </a>
+}\
+</div>
+</main>
+
+
+
+{% endblock%}

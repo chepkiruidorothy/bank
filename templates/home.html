@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
   {% block content%}
+
   <div class="container d-flex d-flex-column justify-content-center ">
 
   {% block title %}  {{user}}'s Dashboard
@@ -11,10 +12,12 @@
 
   <!-- Specific Page CSS goes HERE  -->
   {% block stylesheets %}{% endblock stylesheets %}
-
-
-
-<section class="py-5 border-bottom " style="height:auto" id="dashboard">
+{% include 'list.html'%}
+  <div class="navbar active-nav d-flex justify-content-center flex-wrap flex-column" id="sidebar">
+\
+  </div>
+  <!-- <div class="p-1 my-container active-cont d-flex justify-content-center"> -->
+<section class="py-5  " style="height:auto" id="dashboard">
 
   <div class="row  gx-5 h-100">
       <div class="col-12  col-sm-6 col-xl-4 mb-4">
@@ -24,7 +27,6 @@
                       <div class=" col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center ">
                       </div>
                       <div class=" col-12 col-xl-7 px-xl-0">
-                          <div class=" d-none d-sm-block">
 
                               <h2 class="h6 text-gray-400 mb-0" style="color:blue">Total balances</h2>
 
@@ -36,8 +38,6 @@
                                 <p style="color:green" >{{account_monthly.sum}}</p>
 
                                 {% endfor%}
-
-                              </div>
                           </div>
                       </div>
                   </div>
@@ -51,7 +51,7 @@
                       <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
                       </div>
                       <div class="col-12 col-xl-7 px-xl-0">
-                          <div class="d-none d-sm-block">
+
                             <h2 class="h6 text-gray-400 mb-0" style="color:blue">Total loans</h2>
                             <h3 class="fw-extrabold mb-2" style="color:red" >${{total_loans.sum}}</h3>
                             <div class="">
@@ -60,11 +60,11 @@
                               <p style="color:red" >{{loan_monthly.sum}}</p>
                               {% endfor%}
                             </div>
-                        </div>
-                        <div class="d-none d-sm-block">
+
+
                             <h2 class="h6 text-gray-400 mb-0" style="color:blue"> Total withdrawals</h2>
                             <h3 class="fw-extrabold mb-2" style="color:red">${{total_withdraw.sum}}</h3>
-                        </div>
+
                         <small class="text-gray-500">
                           {% for monthly_withdrawal in monthly_withdrawals%}
                             <p> From {{monthly_withdrawal.month}}:</p>
@@ -85,22 +85,19 @@
   </div>
                       <div class="col-12 col-xl-7 px-xl-0">
 
-                          <div class="d-none d-sm-block">
+
                               <h2 class="h6 text-gray-400 mb-0" style="color:blue"> Total deposits</h2>
                               <h3 class="fw-extrabold mb-2"  style="color:green">${{total_deposited.sum}}</h3>
 
-                          </div>
                           <small class="text-gray-500">
                             {% for monthly_deposit in monthly_deposits%}
                             <p>From {{monthly_deposit.month}}:</p>
                             <p style="color:green">{{monthly_deposit.sum}}</p>
                               {% endfor%}
                           </small>
-                          <div class="d-none d-sm-block">
+
                               <h2 class="h6 text-gray-400 mb-0" style="color:blue"> Total money send</h2>
                               <h3 class="fw-extrabold mb-2"  style="color:green">${{total_transferred.sum}}</h3>
-
-                          </div>
                           <small class="text-gray-500">
                             {% for monthly_transfer in monthly_transfers%}
                               <p> From {{monthly_transfer.month}}:</p>
@@ -115,8 +112,7 @@
       </div>
   </div>
   </section>
-
-<section class="container" style="height:50vh;">
+<!-- <section class="container" style="height:50vh;">
   <div class="container  justify-content-center">
 
         <div class="mt-3 row">
@@ -172,7 +168,7 @@
   </div>
   </div>
 </section>
+ -->
 
-
-{% include 'includes/pagination.html'%}
+<!-- {% include 'includes/pagination.html'%} -->
 {% endblock%}
