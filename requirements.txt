@@ -11,9 +11,9 @@ Django==4.0.4
 django-allauth==0.50.0
 django-appconf==1.0.5
 django-classy-tags==3.0.1
-django-cms==3.10.0
 django-countries==7.3.2
 django-crispy-forms==1.14.0
+django-dynamic-preferences==1.12.0
 django-formtools==2.3
 django-imagekit==4.1.0
 django-sekizai==3.0.1
@@ -29,9 +29,12 @@ numpy==1.22.3
 oauthlib==3.2.0
 packaging==21.3
 pandas==1.4.2
+persisting-theory==1.0
 pilkit==2.0
 Pillow==9.1.0
+postgres==4.0
 psycopg2-binary==2.9.3
+psycopg2-pool==1.1
 pycparser==2.21
 PyJWT==2.3.0
 pyparsing==3.0.8

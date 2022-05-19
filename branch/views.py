@@ -18,16 +18,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 @login_required
 def home(request):
     accounts = Account.objects.filter(customer__user = request.user).order_by('timestamp')
-    #
-    # page = request.GET.get('page', 1)
-    # paginator = Paginator(accounts_list, per_page=3)
-    # try:
-    #     accounts = paginator.page(page)
-    # except PageNotAnInteger:
-    #     accounts = paginator.page(1)
-    # except EmptyPage:
-    #     accounts = paginator.page(paginator.num_pages)
-
     total_amount = Account.objects.filter(customer__user = request.user).aggregate(sum=Coalesce(Sum ('balance'),Decimal(0)) )
     total_loans = Loan.objects.filter(customer__user = request.user).aggregate(sum=Coalesce(Sum ('amount'),Decimal(0)))
     total_withdraw = Transaction.objects.filter(type='Withdrawal').filter(account__customer__user=request.user).aggregate(sum=Coalesce(Sum ('amount'),Decimal(0)) )
@@ -47,11 +37,7 @@ def list(request):
 
 def dashboard(request,pk):
     account = get_object_or_404(Account, pk=pk)
-    accounts = Account.objects.filter(customer__user=request.user)
-    print(accounts)
-    print(account)
     accounts= Account.objects.filter(customer__user = request.user).order_by('timestamp')
-
     total_amount = Account.objects.filter(customer__user = request.user).filter(pk=pk).aggregate(sum=Coalesce(Sum ('balance'),Decimal(0)) )
     total_loans = Loan.objects.filter(customer__user = request.user).filter(pk=pk).aggregate(sum=Coalesce(Sum ('amount'),Decimal(0)))
     total_withdraw = Transaction.objects.filter(type='Withdrawal').filter(pk=pk).filter(account__customer__user=request.user).aggregate(sum=Coalesce(Sum ('amount'),Decimal(0)) )
@@ -63,10 +49,6 @@ def dashboard(request,pk):
     loans_monthly = Loan.objects.filter(customer__user = request.user).filter(pk=pk).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Coalesce(Sum('amount'),Decimal(0))).values('month','sum','c')
     accounts_monthly = Account.objects.filter(customer__user = request.user).filter(pk=pk).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Coalesce(Sum('balance'),Decimal(0))).values('month','sum','c')
     return render(request, 'dashboard.html',{'account':account,"accounts":accounts, "total_withdraw":total_withdraw,"total_transferred":total_transferred, "total_deposited":total_deposited, "loans_monthly":loans_monthly,"monthly_transfers":monthly_transfers, "monthly_deposits":monthly_deposits, "monthly_withdrawals":monthly_withdrawals, "accounts_monthly":accounts_monthly , "total_loans":total_loans, "total_amount":total_amount})
-
-
-
-
 
 def index(request):
     return render(request, 'index.html')
