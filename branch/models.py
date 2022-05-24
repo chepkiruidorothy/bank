@@ -63,3 +63,7 @@ class Singleton(models.Model):
     def load(cls):
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
+
+class Setting(Singleton):
+    customer = models.ForeignKey(Customer,null=False, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account,null=False,on_delete=models.CASCADE)
