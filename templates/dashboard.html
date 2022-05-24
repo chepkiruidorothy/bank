@@ -2,7 +2,9 @@
 
 {% load static%}
   {% block content%}
+  <div class="mt-7">
 
+  </div>
   <div class="container d-flex d-flex-column justify-content-center ">
 
   {% block title %}  {{user}}'s Dashboard
@@ -11,19 +13,30 @@
 
   </div>
 
-  <!-- Specific Page CSS goes HERE  -->
-  {% block stylesheets %}{% endblock stylesheets %}
 
+<div class="mt-5">
 
-{% include 'list.html'%}
+</div>
+  <div class="dropdown d-flex justify-content-end">
+
+    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+      Accounts
+    </a>
+
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        {% for account in accounts%}
+      <li><a class="dropdown-item" href="{% url 'dashboard' account.pk%}">{{account.name}}</a></li>
+
+    {% endfor%}
+    </ul>
+  </div>
 <!-- Main layout -->
-
 
 <div class="container-fluid">
     <div class="row flex-nowrap">
         <div class="col-auto col-md-3  mt-2 col-xl-2 px-sm-2 px-0 bg-dark">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">Menu</span>
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
@@ -32,17 +45,18 @@
                             <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
                         </a>
                     </li>
+
                       {% if account%}
                     <li>
-                        <a href="{%url 'statement' account.pk %}" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-speedometer2"></i> <li <span class="mx-2"> Mini_statement</a>
+                        <a href="{%url 'statement' account.pk %}"class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-table"></i> <li <span class="mx-2"> Mini_statement</a>
                     </li>
                     <li>
                         <a href="{%url 'delete' account.pk %}" class="nav-link px-0 align-middle">
                             <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Delete</span></a>
                     </li>
                     <li>
-                        <a href="{%url 'loan' account.pk%}" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                        <a href="{%url 'loan' account.pk%}"  class="nav-link px-0 align-middle ">
                     <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Request Loan</span></a>
                     </li>
 
@@ -63,20 +77,6 @@
                     {% endif%}
                 </ul>
                 <hr>
-                <div class="dropdown pb-4">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-
-                        <span class="d-none d-sm-inline mx-1">Account</span>
-                    </a>
-                    {% for account in accounts%}
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                        <li><a class="dropdown-item" href="{% url 'dashboard' account.pk%}"> Account</a></li>
-                        {% endfor%}
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
         <div class="col py-3">

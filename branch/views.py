@@ -50,6 +50,11 @@ def dashboard(request,pk):
     accounts_monthly = Account.objects.filter(customer__user = request.user).filter(pk=pk).annotate(month=TruncMonth('timestamp')).values('month').annotate(c=Count('id')).annotate(sum=Coalesce(Sum('balance'),Decimal(0))).values('month','sum','c')
     return render(request, 'dashboard.html',{'account':account,"accounts":accounts, "total_withdraw":total_withdraw,"total_transferred":total_transferred, "total_deposited":total_deposited, "loans_monthly":loans_monthly,"monthly_transfers":monthly_transfers, "monthly_deposits":monthly_deposits, "monthly_withdrawals":monthly_withdrawals, "accounts_monthly":accounts_monthly , "total_loans":total_loans, "total_amount":total_amount})
 
+def settings(request):
+    return {'settings': Setting.load()}
+
+
+
 def index(request):
     return render(request, 'index.html')
 
@@ -183,7 +188,7 @@ def statement(request,pk):
 
 def loan_statement(request,pk):
     account = get_object_or_404(Account, pk=pk)
-    loans = Loan.objects.filter(customer__user=request.user)
+    loans = Loan.objects.filter(customer__user=request.user)[0]
     page = request.GET.get('page', 1)
     paginator = Paginator(loans, per_page=5)
     try:
