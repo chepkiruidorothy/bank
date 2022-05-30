@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'crispy_forms',
     'allauth.socialaccount',
-     'whitenoise.runserver_nostatic',
 
 ]
 
