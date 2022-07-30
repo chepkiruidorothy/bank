@@ -15,12 +15,13 @@
   <div class="navbar active-nav d-flex justify-content-center flex-wrap flex-column" id="sidebar">
     <h2>{{user}}'s Dashboard</h2>
   </div>
-<a href="{% url 'create'%}" class="btn btn-primary ">Create an account</a>
   <div class="dropdown d-flex justify-content-end">
-
-    <a class="btn btn-primary ms-auto dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-      Accounts
-    </a>
+    <a href="{% url 'create'%}" class="btn btn-primary ">Create an account</a>
+{% if accounts%}
+<a class="btn btn-primary ms-auto dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+  Accounts
+</a>
+{% endif %}
 
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         {% for account in accounts%}
@@ -31,14 +32,14 @@
   </div>
 
 
-
+{% if accounts %}
 
 
 <section class="py-5  " style="height:auto" id="dashboard">
 
   <div class="row  gx-5 h-100">
       <div class="col-12  col-sm-6 col-xl-4 mb-4">
-          <div class="card border-0 h-100  shadow">
+          <div class="card bg-success text-white border-5 h-100  shadow">
               <div class="card-body  ">
                   <div class=" row d-block d-xl-flex align-items-center">
                       <div class=" col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center ">
@@ -52,7 +53,7 @@
 
                                 {%for account_monthly  in accounts_monthly %}
                                 <p> From {{account_monthly.month}}:</p>
-                                <p style="color:green" >{{account_monthly.sum}}</p>
+                                <p style="color:white" >{{account_monthly.sum}}</p>
 
                                 {% endfor%}
                           </div>
@@ -62,7 +63,7 @@
           </div>
       </div>
       <div class="col-12 col-sm-6 col-xl-4 mb-4">
-          <div class="card border-0 h-100 shadow">
+          <div class="card bg-danger border-0 h-100 shadow">
               <div class="card-body">
                   <div class="row d-block d-xl-flex align-items-center">
                       <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
@@ -95,7 +96,7 @@
               </div>
           </div>
       <div class="col-12 col-sm-6 col-xl-4 mb-4">
-          <div class="card border-0 h-100 shadow">
+          <div class="card bg-dark  border-5 h-100 shadow">
               <div class="card-body ">
                   <div class="row d-block d-xl-flex align-items-center">
                       <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
@@ -129,4 +130,16 @@
       </div>
   </div>
   </section>
+
+
+  {% else %}
+<div class="mb-5">
+
+</div>
+<div class="container d-flex align-items-center justify-content-center mt-3 ">
+  <h3>You have no account. Create one today </h3>
+</div>
+{% endif %}
+
+
 {% endblock%}

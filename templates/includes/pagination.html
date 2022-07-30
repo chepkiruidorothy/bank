@@ -1,4 +1,4 @@
-<nav aria-label="Page navigation">
+<!-- <nav aria-label="Page navigation">
 
 {% if accounts.has_other_pages %}
   <ul class="pagination justify-content-center">
@@ -18,4 +18,25 @@
       <a  class = "page-link" href="{% if accounts.has_next %} ?page={{ accounts.next_page_number }}{% endif%}">   Next</a></li>
   </ul>
 
-</nav>
+
+</nav> -->
+
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if accounts.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ accounts.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ accounts.number }} of {{ accounts.paginator.num_pages }}.
+        </span>
+
+        {% if accounts.has_next %}
+            <a href="?page={{ accounts.next_page_number }}">next</a>
+            <a href="?page={{ accounts.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>

@@ -188,17 +188,19 @@ def statement(request,pk):
 
 def loan_statement(request,pk):
     account = get_object_or_404(Account, pk=pk)
-    loans = Loan.objects.filter(customer__user=request.user)[0]
-    page = request.GET.get('page', 1)
-    paginator = Paginator(loans, per_page=5)
-    try:
-        accounts = paginator.page(page)
-    except PageNotAnInteger:
-        accounts = paginator.page(1)
-    except EmptyPage:
-        accounts = paginator.page(paginator.num_pages)
 
     if request.method == 'GET':
+        loans = Loan.objects.filter(customer__user=request.user)
+        page = request.GET.get('page', 1)
+        paginator = Paginator(loans, per_page=5)
+        try:
+            accounts = paginator.page(page)
+        except PageNotAnInteger:
+            accounts = paginator.page(1)
+        except EmptyPage:
+            accounts = paginator.page(paginator.num_pages)
+
+
         return render(request, 'loan_statement.html', { 'account':account, 'accounts':accounts})
 
 def send_money(request, pk):

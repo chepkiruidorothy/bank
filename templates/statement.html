@@ -7,29 +7,30 @@
   <form class="" action="" method="post">
 <h1>Your current balance is {{account.balance}}</h1>
 <a href = "{% url 'home'%}" class="btn btn-primary" type="submit" name="button">Home</a>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Type</th>
-          <th scope="col">Amount</th>
-          <th scope="col">Time</th>
-        </tr>
-      </thead>
+{% if accounts %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Type</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Time</th>
+    </tr>
+  </thead>
 
-      <tbody>
-          {% for transaction in accounts%}
-        <tr>
-          <td class="{% if transaction.type == 'Withdrawal'%} text-danger {%endif%}"> {{transaction.type}}</td>
+  <tbody>
+      {% for transaction in accounts%}
+    <tr>
+      <td class="{% if transaction.type == 'Withdrawal'%} text-danger {%endif%}"> {{transaction.type}}</td>
 
-          <td class="{% if transaction.type == 'Withdrawal'%} text-danger {%endif%}">{{transaction.amount}}</td>
-          <td>{{transaction.timestamp}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
+      <td class="{% if transaction.type == 'Withdrawal'%} text-danger {%endif%}">{{transaction.amount}}</td>
+      <td>{{transaction.timestamp}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif%}
   </form>
-
+  
 </div>
-  {% include 'includes/pagination.html'%}
+
 {% endblock %}

@@ -19,9 +19,11 @@
 </div>
   <div class="dropdown d-flex justify-content-end">
 
-    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-      Accounts
-    </a>
+{% if accounts%}
+<a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+  Accounts
+</a>
+{% endif %}
 
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         {% for account in accounts%}
@@ -34,7 +36,7 @@
 
 <div class="container-fluid">
     <div class="row flex-nowrap">
-        <div class="col-auto col-md-3  mt-2 col-xl-2 px-sm-2 px-0 bg-dark">
+        <div class="col-auto col-md-3  mt-2 col-xl-2 px-sm-2 px-0 ">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                 <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5  d-sm-inline">Menu</span>
@@ -145,8 +147,8 @@
                             </div>
                         </div>
                     <div class="col-12 col-sm-6 col-xl-4 mb-4">
-                        <div class="card border-0 h-100 shadow">
-                            <div class="card-body ">
+                        <div class="card bg-secondary  border-0 h-100 shadow">
+                            <div class="card-body " >
                                 <div class="row d-block d-xl-flex align-items-center">
                                     <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
                 </div>
