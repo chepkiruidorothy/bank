@@ -94,22 +94,22 @@ WSGI_APPLICATION = 'bank.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'nw_db',
+#         'USER': 'doroh',
+#         'PASSWORD': 'dorokakz',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 
+DATABASES = {'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))}
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nw_db',
-        'USER': 'doroh',
-        'PASSWORD': 'dorokakz',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
 
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -172,7 +172,7 @@ STATIC_URL = '/static/'
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
-    
+
 )
 
 
