@@ -12,7 +12,7 @@ from decimal import Decimal
 from django.db.models import Sum, Count, DecimalField, Value, FloatField
 from django.db.models.functions import TruncMonth,Coalesce
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.contrib.auth import get_user_model
 
 
 @login_required
@@ -62,8 +62,10 @@ def random_string_generator(size=4, chars=string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 def create(request):
+    User = get_user_model()
+    user = User.objects.get(pk=request.user.pk)
     accounts = Account.objects.filter(customer__user=request.user)
-    user = get_object_or_404(User,username__iexact=request.user)
+    # user = get_object_or_404(User,username__iexact=request.user)
     if request.method == 'POST':
 
         customer, created = Customer.objects.get_or_create(user=request.user)
